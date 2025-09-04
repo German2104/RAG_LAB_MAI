@@ -16,7 +16,6 @@ from aiogram.types import (
     CallbackQuery,
     ReplyKeyboardRemove,
 )
-from backend.indexer import index_file
 
 # Bot token can be obtained via https://t.me/BotFather
 TOKEN = getenv("BOT_TOKEN")
