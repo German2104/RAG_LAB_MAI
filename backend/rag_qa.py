@@ -8,7 +8,7 @@ from textwrap import shorten
 from typing import List, Dict, Any
 
 # наши модули/константы
-from config import TOP_K_DEFAULT, SERVICE_URL
+from backend.config import TOP_K_DEFAULT, SERVICE_URL
 from backend.searcher import search, search_grouped_by_doc  # поиск по чанкам/докам
 
 # ---------- Сбор контекста ----------

@@ -7,7 +7,7 @@ from collections import defaultdict
 from typing import List, Dict, Any
 
 from pymilvus import MilvusClient
-from config import DB_PATH, COLLECTION, VECTOR_FIELD, DIMENSION, SERVICE_URL, TOP_K_DEFAULT
+from backend.config import DB_PATH, COLLECTION, VECTOR_FIELD, DIMENSION, SERVICE_URL, TOP_K_DEFAULT
 
 def embed_query(query: str) -> np.ndarray:
     resp = requests.post(f"{SERVICE_URL}/embed", json={"texts": [query]}, timeout=60)

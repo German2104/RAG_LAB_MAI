@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import torch
 from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModel
 import uvicorn
 
-from config import EMBEDDING_MODEL_NAME, DIMENSION, SERVICE_HOST, SERVICE_PORT
+from backend.config import EMBEDDING_MODEL_NAME, DIMENSION, SERVICE_HOST, SERVICE_PORT
 
 device = (
     "cuda" if torch.cuda.is_available()
@@ -68,4 +70,4 @@ def embed(req: EmbedRequest):
         return {"embeddings": embeddings}
 
 if __name__ == "__main__":
-    uvicorn.run("deploy:app", host=SERVICE_HOST, port=SERVICE_PORT, reload=False)
+    uvicorn.run(app, host=SERVICE_HOST, port=SERVICE_PORT, reload=False)
