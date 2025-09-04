@@ -1,0 +1,37 @@
+# --- Core ML/LLM ---
+numpy<2
+torch>=2.2,<3.0
+transformers>=4.41,<5.0
+accelerate>=0.30,<1.0
+einops>=0.7,<1.0
+
+# --- HTTP клиент ---
+requests>=2.31,<3.0
+
+# --- OpenAI API ---
+openai>=1.0,<2.0
+
+# --- Работа с документами и PDF ---
+python-docx>=1.1,<2.0
+pymupdf4llm>=0.0.15,<0.1
+
+# --- Виджеты в Jupyter ---
+ipywidgets>=8.1,<9.0
+widgetsnbextension>=4.0,<5.0
+
+# --- Векторная БД ---
+pymilvus>=2.4,<3.0
+
+# --- Утилиты ---
+tqdm>=4.66,<5.0
+
+# --- Jupyter окружение (удобно для ноутбуков) ---
+jupyterlab>=4.0,<5.0
+ipykernel>=6.28,<7.0
+
+# --- Telegram Bot ---
+aiogram
+
+# --- Модель деплой ---
+vllm
+kserve
