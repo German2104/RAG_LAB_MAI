@@ -33,6 +33,5 @@ ipykernel>=6.28,<7.0
 aiogram
 
 # --- Модель деплой ---
-vllm
 kserve
 requests
