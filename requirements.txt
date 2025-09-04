@@ -35,3 +35,4 @@ aiogram
 # --- Модель деплой ---
 kserve
 requests
+gigachat

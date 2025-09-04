@@ -16,6 +16,9 @@ from aiogram.types import (
     CallbackQuery,
     ReplyKeyboardRemove,
 )
+from backend.indexer import index_file
+from backend.searcher import search  # подключаем поиск
+from backend.rag_qa import answer_with_top_docs, answer_with_top_chunks
 
 # Bot token can be obtained via https://t.me/BotFather
 TOKEN = getenv("BOT_TOKEN")
@@ -33,7 +36,6 @@ start_keyboard = InlineKeyboardMarkup(
 # All handlers should be attached to the Router (or Dispatcher)
 
 dp = Dispatcher()
-
 
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
@@ -97,17 +99,54 @@ async def handle_document(message: Message, bot: Bot) -> None:
         f"Путь: <code>{dest_path.as_posix()}</code>\n"
         "Начинаю индексацию… Это может занять немного времени."
     )
-    # Запускаем индексацию в пуле потоков, чтобы не блокировать polling
+
     def _run():
         index_file(str(dest_path))
 
     loop = asyncio.get_running_loop()
     try:
         await loop.run_in_executor(None, _run)
-        await message.answer("✅ Индексация завершена. Файл добавлен в БД Milvus.")
+        # После успешной индексации показываем клавиатуру
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="💬 Начать ответы по документам", callback_data="start_qa")]
+            ]
+        )
+        await message.answer("✅ Индексация завершена. Файл добавлен в БД Milvus.", reply_markup=keyboard)
     except Exception as e:
         await message.answer(f"❌ Ошибка индексации: <code>{e}</code>")
 
+@dp.callback_query(F.data == "start_qa")
+async def on_start_qa(callback: CallbackQuery) -> None:
+    await callback.message.answer(
+        "📖 Отлично! Теперь пришли мне любой вопрос по документам, и я найду для тебя ответы.",
+        reply_markup=ReplyKeyboardRemove()
+    )
+    await callback.answer()
+
+
+
+
+@dp.message(F.text)
+async def handle_question(message: Message) -> None:
+    query = message.text.strip()
+    if not query:
+        return
+
+    await message.answer("🔎 Ищу ответ по документам…")
+
+    try:
+        # Вариант A: если в индексе есть doc_name — используем документы
+        # answer = answer_with_top_docs(query, top_docs=10, chunks_per_doc=3)
+
+        # Вариант B: если храним только чанки (без doc_name) — используем топ чанков
+        answer = answer_with_top_chunks(query, top_k=10)
+
+        await message.answer(f"💡 Ответ:\n\n{answer}")
+    except Exception as e:
+        await message.answer(f"⚠️ Ошибка поиска/генерации: <code>{e}</code>")
+
+        
 async def main() -> None:
     # Initialize Bot instance with default bot properties which will be passed to all API calls
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
