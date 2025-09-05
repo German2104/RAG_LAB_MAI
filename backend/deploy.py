@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModel
 import uvicorn
 
-from backend.config import EMBEDDING_MODEL_NAME, DIMENSION, SERVICE_HOST, SERVICE_PORT
+from backend.config import EMBEDDING_MODEL_NAME, DIMENSION, SERVICE_HOST, SERVICE_PORT, HF_TOKEN
 
 device = (
     "cuda" if torch.cuda.is_available()
@@ -19,8 +19,8 @@ device = (
 
 # === Загружаем модель один раз при старте ===
 print(f"🚀 Загружаем модель {EMBEDDING_MODEL_NAME} на {device}...")
-tokenizer = AutoTokenizer.from_pretrained(EMBEDDING_MODEL_NAME, trust_remote_code=True)
-model = AutoModel.from_pretrained(EMBEDDING_MODEL_NAME, trust_remote_code=True)
+tokenizer = AutoTokenizer.from_pretrained(EMBEDDING_MODEL_NAME, trust_remote_code=True, token=HF_TOKEN)
+model = AutoModel.from_pretrained(EMBEDDING_MODEL_NAME, trust_remote_code=True, token=HF_TOKEN)
 if device == "cuda":
     model = model.half()
 model = model.eval().to(device)

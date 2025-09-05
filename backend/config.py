@@ -5,6 +5,7 @@
 import os
 import sys
 from pathlib import Path
+HF_TOKEN = os.getenv("HF_TOKEN") or os.getenv("HUGGINGFACE_HUB_TOKEN")
 
 # --- резолвинг корня проекта ---
 BACKEND_DIR = Path(__file__).resolve().parent
