@@ -40,7 +40,6 @@ uploads/
 
 # --- конфигурация ---
 .env
-.env.*
 *.pem
 *.crt
 *.key

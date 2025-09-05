@@ -5,6 +5,9 @@ import os
 from functools import lru_cache
 from typing import Optional
 from pathlib import Path
+# Если запускаешь из папки backend/, гарантируем импорт конфига из корня
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 # auto-load .env из корня проекта
 try:

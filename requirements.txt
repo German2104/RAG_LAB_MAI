@@ -36,3 +36,4 @@ aiogram
 kserve
 requests
 gigachat
+langchain_gigachat
