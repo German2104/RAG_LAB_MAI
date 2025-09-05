@@ -1,4 +1,43 @@
-.venv
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- виртуальное окружение ---
+.venv/
+venv/
+env/
+
+# --- системные файлы ---
+.DS_Store
+Thumbs.db
+
+# --- IDE ---
+.vscode/
+.idea/
+
+# --- тесты/отчёты ---
+.coverage
+htmlcov/
+*.log
+
+# --- данные ---
+db/
+uploads/
+*.sqlite3
+
+# --- конфигурация ---
 .env
-./db
-**/__pycache__
+.env.*
+*.pem
+*.crt
+*.key
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+*.ipynb
+
+# --- build ---
+build/
+dist/
+*.egg-info/
