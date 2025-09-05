@@ -3,12 +3,14 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+**/__pycache__/
 *$py.class
 
 # --- виртуальное окружение ---
 .venv/
 venv/
 env/
+*.egg-info/
 
 # --- IDE ---
 .vscode/
@@ -27,6 +29,8 @@ htmlcov/
 db/
 *.db
 *.db.lock
+db/
+uploads/
 
 # --- загруженные файлы ---
 uploads/
