@@ -20,7 +20,7 @@ from aiogram.types import (
 )
 from backend.indexer import index_file
 from backend.searcher import search  # подключаем поиск
-from backend.rag_qa import answer_with_top_docs, answer_with_top_chunks
+from backend.rag_qa import answer_with_top_docs
 
 # Bot token can be obtained via https://t.me/BotFather
 TOKEN = getenv("BOT_TOKEN")
@@ -116,7 +116,7 @@ async def handle_document(message: Message, bot: Bot) -> None:
         )
         await message.answer("✅ Индексация завершена. Файл добавлен в БД Milvus.", reply_markup=keyboard)
     except Exception as e:
-        await message.answer(f"❌ Ошибка индексации: <code>{e}</code>")
+        await message.answer("❌ Ошибка индексации:\n" + html.code(str(e)))
 
 @dp.callback_query(F.data == "start_qa")
 async def on_start_qa(callback: CallbackQuery) -> None:
@@ -138,15 +138,12 @@ async def handle_question(message: Message) -> None:
     await message.answer("🔎 Ищу ответ по документам…")
 
     try:
-        # Вариант A: если в индексе есть doc_name — используем документы
-        # answer = answer_with_top_docs(query, top_docs=10, chunks_per_doc=3)
-
-        # Вариант B: если храним только чанки (без doc_name) — используем топ чанков
-        answer = answer_with_top_chunks(query, top_k=10)
-
-        await message.answer(f"💡 Ответ:\n\n{answer}")
+        # можно answer_with_top_chunks(query, top_k=10)
+        answer = answer_with_top_docs(query, top_docs=5, chunks_per_doc=3)
+        await message.answer(answer, parse_mode=None)  # без HTML-парсинга – безопасно
     except Exception as e:
-        await message.answer(f"⚠️ Ошибка поиска/генерации: <code>{e}</code>")
+        # не даём Телеграму парсить угловые скобки из трейсбеков
+        await message.answer(f"⚠️ Ошибка поиска/генерации:\n{e}", parse_mode=None)
 
         
 async def main() -> None:

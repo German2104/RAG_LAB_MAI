@@ -56,7 +56,6 @@ def chunk_text(text: str, chunk_size: int = 700, overlap: int = 120) -> list[str
             break
     return chunks
 
-# -------------------- сервис эмбеддингов --------------------
 def embed_via_service(texts: list[str]) -> np.ndarray:
     """Отправляем запрос к deploy.py (/embed) и получаем эмбеддинги [N, DIMENSION]."""
     if not texts:
@@ -71,7 +70,6 @@ def embed_via_service(texts: list[str]) -> np.ndarray:
         raise RuntimeError(f"Ожидался массив [N,{DIMENSION}], получили {arr.shape}")
     return arr
 
-# -------------------- Milvus --------------------
 def ensure_collection(milvus: MilvusClient) -> None:
     """Создаёт коллекцию и индекс при отсутствии. PK обязателен даже при auto_id=True."""
     if milvus.has_collection(COLLECTION):
